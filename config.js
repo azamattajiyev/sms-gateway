@@ -1,0 +1,5 @@
+module.exports = {
+  PORT: 3000,
+  API_KEY: "SUPER_SECRET_API_KEY",
+  MAX_SMS_PER_DEVICE: 500
+};
