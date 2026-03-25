@@ -50,12 +50,14 @@ function startWsServer(server) {
 
     const job = queue.getNext();
 
-    deviceData.device.ws.send(
-      JSON.stringify({
-        type: "SEND_SMS",
-        payload: job
-      })
-    );
+    if (deviceData.device.ws.readyState === WebSocket.OPEN) {
+      deviceData.device.ws.send(
+        JSON.stringify({
+          type: "SEND_SMS",
+          payload: job
+        })
+      );
+    }
   }, 1000);
 }
 
