@@ -21,6 +21,7 @@ function startWsServer(server) {
         deviceId = msg.deviceId;
         registerDevice(deviceId, ws);
         console.log("📱 Device connected:", deviceId);
+        ws.send(JSON.stringify({ "type": "REGISTERED" }));
       }
 
       if (msg.type === "SMS_SENT") {
