@@ -11,26 +11,50 @@ const { MAX_SMS_PER_DEVICE } = require("./config");
 function startWsServer(server) {
   const wss = new WebSocket.Server({ server });
 
+  function heartbeat() {
+    this.isAlive = true;
+  }
+
   wss.on("connection", (ws) => {
     let deviceId = null;
 
+    ws.isAlive = true;
+
+    ws.on("pong", heartbeat);
+
     ws.on("message", (data) => {
-      const msg = JSON.parse(data);
+      let msg;
 
-      if (msg.type === "REGISTER") {
-        deviceId = msg.deviceId;
-        registerDevice(deviceId, ws);
-        console.log("📱 Device connected:", deviceId);
-        ws.send(JSON.stringify({ "type": "REGISTERED" }));
+      try {
+        msg = JSON.parse(data);
+      } catch {
+        return;
       }
 
-      if (msg.type === "SMS_SENT") {
-        incrementCounter(deviceId);
-        console.log("✅ SMS sent by", deviceId);
-      }
+      switch (msg.type) {
+        case "REGISTER":
+          deviceId = msg.deviceId;
+          ws.deviceId = deviceId;
 
-      if (msg.type === "SMS_FAILED") {
-        console.log("❌ SMS failed:", msg.reason);
+          registerDevice(deviceId, ws);
+
+          console.log("📱 Device connected:", deviceId);
+
+          ws.send(JSON.stringify({ type: "REGISTERED" }));
+          break;
+
+        case "PONG":
+          ws.isAlive = true;
+          break;
+
+        case "SMS_SENT":
+          incrementCounter(deviceId);
+          console.log("✅ SMS sent by", deviceId);
+          break;
+
+        case "SMS_FAILED":
+          console.log("❌ SMS failed:", msg.reason);
+          break;
       }
     });
 
@@ -42,7 +66,30 @@ function startWsServer(server) {
     });
   });
 
-  // очередь обработки
+  // =============================
+  // 🔥 HEARTBEAT LOOP
+  // =============================
+  const interval = setInterval(() => {
+    wss.clients.forEach((ws) => {
+      if (ws.isAlive === false) {
+        console.log("💀 Kill dead:", ws.deviceId);
+        return ws.terminate();
+      }
+
+      ws.isAlive = false;
+
+      try {
+        ws.ping(); // TCP keepalive
+        ws.send(JSON.stringify({ type: "PING" })); // Flutter fallback
+      } catch (e) {}
+    });
+  }, 25000);
+
+  wss.on("close", () => clearInterval(interval));
+
+  // =============================
+  // QUEUE PROCESSING
+  // =============================
   setInterval(() => {
     if (!queue.hasItems()) return;
 
