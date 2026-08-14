@@ -1,0 +1,23 @@
+<nav class="page-breadcrumb" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/admin/accounts">Accounts</a></li>
+    <li class="breadcrumb-item"><a href="/admin/accounts/<%= account.id %>/edit"><%= account.name %></a></li>
+    <li class="breadcrumb-item active" aria-current="page">API key</li>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">API key for <%= account.name %></h4>
+        <div class="alert alert-warning" role="alert">Copy now; it will not be shown again.</div>
+        <code class="api-key-block"><%= apiKey %></code>
+        <div class="mt-3 d-flex gap-2">
+          <a class="btn btn-primary" href="/admin/accounts/<%= account.id %>/edit">Edit account</a>
+          <a class="btn btn-outline-secondary" href="/admin/accounts">Back to list</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

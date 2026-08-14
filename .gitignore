@@ -1,6 +1,12 @@
 # Node modules
 node_modules/
 
+# SQLite persistence
+data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+
 # Logs
 logs
 *.log
@@ -46,7 +52,6 @@ dist
 
 # Gatsby files
 .cache/
-public
 
 # TypeScript cache
 *.tsbuildinfo

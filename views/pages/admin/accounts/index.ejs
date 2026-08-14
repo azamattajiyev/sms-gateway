@@ -1,0 +1,40 @@
+<nav class="page-breadcrumb" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">Accounts</li>
+  </ol>
+</nav>
+
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h6 class="card-title mb-0">Accounts</h6>
+      <a class="btn btn-primary" href="/admin/accounts/new">Add account</a>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Key prefix</th>
+            <th>Brand</th>
+            <th>OTP length</th>
+            <th>SMS remaining</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (!accounts.length) { %>
+            <tr>
+              <td colspan="8" class="text-muted">No accounts yet.</td>
+            </tr>
+          <% } %>
+          <% accounts.forEach(function (account) { %>
+            <%- include("table_row", { account: account }) %>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<nav class="page-breadcrumb" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page">Devices</li>
+  </ol>
+</nav>
+
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h6 class="card-title mb-0">Online devices</h6>
+      <a class="btn btn-outline-secondary" href="/admin/devices">Refresh</a>
+    </div>
+    <p class="text-muted small">Disconnecting devices from this page is not available.</p>
+    <div class="table-responsive">
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th>Device ID</th>
+            <th>Status</th>
+            <th>Sent</th>
+            <th>Connected at</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (!devices.length) { %>
+            <tr>
+              <td colspan="4" class="text-muted">No devices online</td>
+            </tr>
+          <% } %>
+          <% devices.forEach(function (device) { %>
+            <tr>
+              <td><code><%= device.deviceId %></code></td>
+              <td>
+                <% if (device.readyState === 1) { %>
+                  <span class="badge text-bg-success">Online</span>
+                <% } else { %>
+                  <span class="badge text-bg-warning">Connecting</span>
+                <% } %>
+              </td>
+              <td><%= device.sentCount %> / <%= maxSmsPerDevice %></td>
+              <td>
+                <%= device.connectedAt ? new Date(device.connectedAt).toISOString() : "—" %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<nav class="page-breadcrumb" aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/admin/accounts">Accounts</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Create</li>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Add account</h4>
+        <form action="/admin/accounts" method="post">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input id="name" name="name" class="form-control" type="text" required maxlength="64" value="<%= values.name %>">
+          </div>
+          <div class="mb-3">
+            <label for="brandName" class="form-label">Brand name</label>
+            <input id="brandName" name="brandName" class="form-control" type="text" required maxlength="64" value="<%= values.brandName %>">
+            <div class="form-text">Used as <code>Your {brandName} code: {code}</code></div>
+          </div>
+          <div class="mb-3">
+            <label for="otpLength" class="form-label">OTP length</label>
+            <input id="otpLength" name="otpLength" class="form-control" type="number" min="4" max="8" step="1" value="<%= values.otpLength %>">
+          </div>
+          <div class="mb-3">
+            <label for="smsQuota" class="form-label">Initial SMS quota</label>
+            <input id="smsQuota" name="smsQuota" class="form-control" type="number" min="0" step="1" value="<%= values.smsQuota %>">
+            <div class="form-text">Further adds use top-up on the edit page.</div>
+          </div>
+          <button class="btn btn-primary" type="submit">Save</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

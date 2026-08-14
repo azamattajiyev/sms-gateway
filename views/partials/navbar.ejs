@@ -1,0 +1,6 @@
+<header class="admin-navbar">
+  <div class="admin-navbar-user"><%= user && user.username ? user.username : "" %></div>
+  <form action="/logout" method="post">
+    <button type="submit" class="btn btn-sm btn-outline-secondary">Log out</button>
+  </form>
+</header>

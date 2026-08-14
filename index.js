@@ -1,33 +1,23 @@
-const express = require("express");
+require("dotenv").config();
 const http = require("http");
-const cors = require("cors");
-const { PORT } = require("./config");
-const { apiKeyGuard } = require("./middleware");
-const queue = require("./queue");
+const { PORT, HOST, getLanIPv4, assertAdminConfig } = require("./config");
+const { getDb } = require("./db");
+const { createApp } = require("./app");
 const startWsServer = require("./ws");
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-app.post("/api/send-otp", apiKeyGuard, (req, res) => {
-  const { phone, message } = req.body;
-
-  if (!phone || !message) {
-    return res.status(400).json({ error: "phone and code required" });
-  }
-
-  queue.addToQueue({
-    phone,
-    message
-  });
-
-  res.json({ status: "queued" });
-});
-
+assertAdminConfig();
+getDb();
+const app = createApp();
 const server = http.createServer(app);
 startWsServer(server);
 
-server.listen(PORT, () => {
-  console.log("🚀 SMS Gateway running on port", PORT);
+server.listen(PORT, HOST, () => {
+  console.log(`SMS Gateway listening on http://${HOST}:${PORT}`);
+  const lanIp = getLanIPv4();
+  if (lanIp) {
+    console.log(`http://${lanIp}:${PORT}`);
+    console.log(`WebSocket ws://${lanIp}:${PORT}/ws`);
+  } else {
+    console.warn("No private IPv4 found; set sms_relay wsUrl by hand");
+  }
 });

@@ -1,0 +1,18 @@
+<tr>
+  <td><%= account.id %></td>
+  <td><%= account.name %></td>
+  <td><code><%= account.apiKeyPrefix %>…</code></td>
+  <td><%= account.brandName %></td>
+  <td><%= account.otpLength %></td>
+  <td><%= account.smsQuota %></td>
+  <td>
+    <% if (account.enabled) { %>
+      <span class="badge text-bg-success">Enabled</span>
+    <% } else { %>
+      <span class="badge text-bg-secondary">Disabled</span>
+    <% } %>
+  </td>
+  <td>
+    <a class="btn btn-primary btn-sm" href="/admin/accounts/<%= account.id %>/edit">Edit</a>
+  </td>
+</tr>
