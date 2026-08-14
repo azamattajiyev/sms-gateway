@@ -97,6 +97,7 @@
     "errInvalidPhone": "phone fails validation",
     "errUnauthorized": "Missing, unknown, or disabled key",
     "errQuota": "Remaining SMS is 0",
+    "errRateLimit": "Same phone already queued an OTP within 60 seconds; quota is not charged. Retry-After is seconds remaining.",
     "errQueueFull": "Service busy; quota is not charged",
     "curlHeading": "curl example",
     "exampleHeading": "Server-side example",
@@ -106,7 +107,7 @@
     "sec2": "If the key leaks, ask the operator to reissue it.",
     "sec3": "Use separate keys per environment (dev / staging / prod) if the operator issued them.",
     "sec4": "401 — stop and fix credentials.",
-    "sec5": "429 — quota exhausted; contact the operator.",
+    "sec5": "429 — quota exceeded (contact the operator) or too many requests for that phone (wait Retry-After seconds).",
     "sec6": "503 — retry later; quota is not charged for this response.",
     "sec7": "The returned code is a secret for verification on your side. Do not log it in production."
   }

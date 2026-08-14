@@ -153,6 +153,7 @@ module.exports = {
   MAX_SMS_PER_DEVICE: envInt("MAX_SMS_PER_DEVICE", 500),
   CORS_ORIGIN: process.env.CORS_ORIGIN || "*",
   MAX_QUEUE_SIZE: envInt("MAX_QUEUE_SIZE", 1000),
+  OTP_RATE_LIMIT_MS: envInt("OTP_RATE_LIMIT_MS", 60000),
   // Default: sms-gateway/data/gateway.sqlite (relative to this file).
   SQLITE_PATH: resolveSqlitePath(process.env.SQLITE_PATH),
   NODE_ENV,

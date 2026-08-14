@@ -8,6 +8,7 @@ const { getDb } = require("./db");
 const { accountApiKeyGuard } = require("./middleware");
 const accounts = require("./accounts");
 const queue = require("./queue");
+const rateLimit = require("./rate-limit");
 const { generateOtp, formatOtpMessage } = require("./otp");
 const { requireAdmin } = require("./admin/middleware");
 const publicRoutes = require("./public-site/routes");
@@ -93,6 +94,12 @@ function createApp() {
       return res.status(400).json({ error: "invalid phone" });
     }
 
+    const limited = rateLimit.check(phone);
+    if (!limited.allowed) {
+      res.set("Retry-After", String(limited.retryAfterSec));
+      return res.status(429).json({ error: "too many requests" });
+    }
+
     if (queue.size() >= MAX_QUEUE_SIZE) {
       return res.status(503).json({ error: "queue full" });
     }
@@ -110,6 +117,7 @@ function createApp() {
       message,
       accountId: req.account.id
     });
+    rateLimit.record(phone);
 
     res.json({ status: "queued", code });
   });

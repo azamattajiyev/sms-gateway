@@ -8,6 +8,7 @@ A Node.js HTTP + WebSocket SMS gateway. Android relay devices connect over WebSo
 
 - WebSocket-based device connection (shared env `API_KEY` for device `REGISTER` only)
 - Per-account HTTP `POST /api/send-otp` (quota, OTP length, brand name)
+- Per-phone send-otp rate limit (1 successful enqueue per 60 seconds, `OTP_RATE_LIMIT_MS`)
 - Server-generated OTP and message: `Your {brandName} code: {code}`
 - Load balancing between devices
 - SMS rate limiting per device
@@ -156,7 +157,7 @@ Authenticates against an **account** row in SQLite, not env `API_KEY`.
 { "status": "queued", "code": "4821" }
 ```
 
-Queued SMS text is `Your {brandName} code: {code}` (example brand `Abat`, code `4821` → `Your Abat code: 4821`). Quota is decremented atomically at enqueue.
+Queued SMS text is `Your {brandName} code: {code}` (example brand `Abat`, code `4821` → `Your Abat code: 4821`). Quota is decremented atomically at enqueue. Each phone number may receive at most one successful enqueue per `OTP_RATE_LIMIT_MS` (default 60 seconds), globally across accounts.
 
 **Errors**
 
@@ -165,6 +166,7 @@ Queued SMS text is `Your {brandName} code: {code}` (example brand `Abat`, code `
 | 400 | `{ "error": "phone required" }` | Missing / empty `phone` |
 | 400 | `{ "error": "invalid phone" }` | `phone` fails validation |
 | 401 | `{ "error": "Unauthorized" }` | Missing, unknown, or disabled key — including env `API_KEY` |
+| 429 | `{ "error": "too many requests" }` | Same phone already queued an OTP within `OTP_RATE_LIMIT_MS` (default 60s). Quota is **not** consumed. `Retry-After` is seconds remaining in the window (integer ≥ 1). |
 | 429 | `{ "error": "quota exceeded" }` | Account remaining SMS is 0 (or consume failed) |
 | 503 | `{ "error": "queue full" }` | In-memory queue at `MAX_QUEUE_SIZE` (quota not consumed) |
 
@@ -293,6 +295,7 @@ They are **not** interchangeable. Env `API_KEY` returns 401 on send-otp. An acco
 | `MAX_SMS_PER_DEVICE` | `500` | Max successful SMS per device (`sentCount` after `SMS_SENT`). |
 | `CORS_ORIGIN` | empty / `*` | Open CORS, or comma-separated allowed origins. |
 | `MAX_QUEUE_SIZE` | `1000` | Max in-memory queue length; reject enqueue when full. |
+| `OTP_RATE_LIMIT_MS` | `60000` | Per-phone send-otp window. At most one successful enqueue per number per window (same digits with/without `+` share the limit). |
 | `SQLITE_PATH` | `data/gateway.sqlite` | SQLite file for accounts and quotas. Relative paths are from the `sms-gateway` directory. `data/` is gitignored. |
 | `SESSION_SECRET` | `dev-session-secret` (local only) | Signs the `admin.sid` cookie. **Local default is not for production.** |
 | `ADMIN_USERNAME` | `admin` | Admin login at `/login`. |
@@ -306,7 +309,7 @@ They are **not** interchangeable. Env `API_KEY` returns 401 on send-otp. An acco
 ### Persistence
 
 - **SQLite** (`SQLITE_PATH`): API accounts, hashed keys, remaining SMS quota. Survives process restart.
-- **In-memory**: SMS queue and device registry (`sentCount`, online sockets). Lost on restart.
+- **In-memory**: SMS queue, device registry (`sentCount`, online sockets), and per-phone OTP rate-limit timestamps. Lost on restart.
 
 ### `PORT` vs Nginx `6050`
 
@@ -323,6 +326,7 @@ API_KEY=replace-me
 MAX_SMS_PER_DEVICE=500
 CORS_ORIGIN=*
 MAX_QUEUE_SIZE=1000
+OTP_RATE_LIMIT_MS=60000
 SQLITE_PATH=data/gateway.sqlite
 SESSION_SECRET=replace-with-a-long-random-string
 ADMIN_USERNAME=admin
@@ -420,6 +424,7 @@ sms-gateway/
 ├── db.js             better-sqlite3 open/schema
 ├── accounts.js       Account CRUD, hashed keys, quota
 ├── otp.js            OTP generate + message template
+├── rate-limit.js     Per-phone send-otp cooldown (in-memory)
 ├── admin/            Login, accounts CRUD, devices page
 ├── views/            EJS layouts and pages
 ├── public/           Admin CSS

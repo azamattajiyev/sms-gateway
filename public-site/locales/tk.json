@@ -97,6 +97,7 @@
     "errInvalidPhone": "phone barlagdan geçmeýär",
     "errUnauthorized": "Açarsyz, näbelli ýa-da öçürilen açar",
     "errQuota": "Galan SMS 0",
+    "errRateLimit": "Şu belga soňky 60 sekuntda OTP nobata goýuldy; kwota aýrylmaýar. Retry-After — galan sekuntlar.",
     "errQueueFull": "Serwis meşgul; kwota aýrylmaýar",
     "curlHeading": "curl mysaly",
     "exampleHeading": "Serwer mysaly",
@@ -106,7 +107,7 @@
     "sec2": "Açary syzsa, operatordan täzeden bermegini soraň.",
     "sec3": "Dürli gurşawlar üçin (dev / staging / prod) operator beren bolsa, aýry açarlary ulanyň.",
     "sec4": "401 — duruň we şahsyýetnamany düzediň.",
-    "sec5": "429 — kwota gutardy; operatora ýüz tutuň.",
+    "sec5": "429 — kwota gutardy (operatora ýüz tutuň) ýa-da şu belga gaty köp çagyryş (Retry-After sekunt garaşyň).",
     "sec6": "503 — soňrak täzeden synanyşyň; bu jogap üçin kwota aýrylmaýar.",
     "sec7": "Gaýtarylan code — siziň tarapyňyzda barlamak üçin gizlinlik. Ony önümçilikde log-a ýazman."
   }

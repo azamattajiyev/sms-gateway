@@ -54,6 +54,7 @@ function assertDocsProtocolTokens(html) {
   assert.match(html, /queued/);
   assert.match(html, /Unauthorized/);
   assert.match(html, /quota exceeded/);
+  assert.match(html, /too many requests/);
   assert.match(html, /queue full/);
   assert.match(html, /otp_YOUR_API_KEY/);
   assert.match(html, /curl -sS -X POST/);
@@ -111,6 +112,7 @@ describe("public site", () => {
     assert.match(html, /queued/);
     assert.match(html, /Unauthorized/);
     assert.match(html, /quota exceeded/);
+    assert.match(html, /too many requests/);
     assert.match(html, /queue full/);
     assert.match(html, /tel:\+77000000000/);
     assert.doesNotMatch(html, /с оператором/);
