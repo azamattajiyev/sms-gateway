@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="<%= locale %>">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= typeof title !== "undefined" ? title : "Abat OTP" %> · Abat OTP</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/landing.css">
+  <% locales.forEach(function (code) { %>
+    <link rel="alternate" hreflang="<%= code %>" href="<%= currentPath %>?lang=<%= code %>">
+  <% }); %>
+  <link rel="alternate" hreflang="x-default" href="<%= currentPath %>">
+</head>
+<body class="landing-body">
+  <a class="visually-hidden-focusable landing-skip" href="#main-content"><%= t("nav.skip") %></a>
+  <header class="landing-header">
+    <nav class="landing-nav" aria-label="<%= t("nav.aria") %>">
+      <a href="/" class="landing-brand">Abat<span>OTP</span></a>
+      <div class="landing-nav-end">
+        <ul class="landing-nav-links">
+          <li>
+            <a href="/" class="landing-nav-link<%= currentPath === "/" ? " active" : "" %>"><%= t("nav.home") %></a>
+          </li>
+          <li>
+            <a href="/docs" class="landing-nav-link<%= currentPath === "/docs" ? " active" : "" %>"><%= t("nav.docs") %></a>
+          </li>
+        </ul>
+        <ul class="landing-lang" aria-label="<%= t("nav.langAria") %>">
+          <% locales.forEach(function (code) { %>
+            <li>
+              <a
+                href="<%= currentPath %>?lang=<%= code %>"
+                class="landing-lang-link<%= locale === code ? " active" : "" %>"
+                <% if (locale === code) { %>aria-current="true"<% } %>
+              ><%= t("lang." + code) %></a>
+            </li>
+          <% }); %>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <main id="main-content" class="landing-main">
+    <%- body %>
+  </main>
+  <footer class="landing-footer">
+    <nav class="landing-footer-nav" aria-label="<%= t("nav.footerAria") %>">
+      <a href="/"><%= t("nav.home") %></a>
+      <a href="/docs"><%= t("nav.docs") %></a>
+      <% if (typeof contact !== "undefined" && contact.email) { %>
+        <a href="mailto:<%= contact.email %>"><%= contact.email %></a>
+      <% } %>
+      <% if (typeof contact !== "undefined" && contact.telegram) { %>
+        <a href="<%= contact.telegramUrl %>"><%= contact.telegramDisplay %></a>
+      <% } %>
+      <% if (typeof contact !== "undefined" && contact.phone) { %>
+        <a href="tel:<%= contact.phoneTel %>"><%= contact.phone %></a>
+      <% } %>
+    </nav>
+    <p class="landing-footer-copy">Abat OTP</p>
+  </footer>
+</body>
+</html>

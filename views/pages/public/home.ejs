@@ -1,0 +1,115 @@
+<section class="landing-hero">
+  <p class="landing-kicker">B2B · SMS OTP</p>
+  <h1>Abat OTP</h1>
+  <p class="landing-hero-lead"><%= t("home.heroLead") %></p>
+  <p><%= t("home.heroBody") %></p>
+  <div class="landing-hero-actions">
+    <a class="landing-btn landing-btn-primary" href="/docs"><%= t("home.ctaDocs") %></a>
+    <% if (contact.email) { %>
+      <a class="landing-btn landing-btn-secondary" href="mailto:<%= contact.email %>"><%= t("home.ctaRequest") %></a>
+    <% } %>
+  </div>
+</section>
+
+<section class="landing-section" aria-labelledby="how-heading">
+  <h2 id="how-heading"><%= t("home.howHeading") %></h2>
+  <p class="landing-section-lead"><%= t("home.howLeadBefore") %> <a href="/docs"><%= t("home.howLeadLink") %></a><%= t("home.howLeadAfter") %></p>
+  <ol class="landing-steps">
+    <li class="landing-card">
+      <h3><%= t("home.step1Title") %></h3>
+      <p><%= t("home.step1Body") %></p>
+    </li>
+    <li class="landing-card">
+      <h3><%= t("home.step2Title") %></h3>
+      <p><%= t("home.step2Body") %></p>
+    </li>
+    <li class="landing-card">
+      <h3><%= t("home.step3Title") %></h3>
+      <p><%= t("home.step3Body") %></p>
+    </li>
+  </ol>
+</section>
+
+<section class="landing-section" id="key" aria-labelledby="key-heading">
+  <h2 id="key-heading"><%= t("home.keyHeading") %></h2>
+  <p class="landing-section-lead"><%= t("home.keyLead") %></p>
+  <ol class="landing-key-list">
+    <li>
+      <% if (contact.hasChannels) { %>
+        <%= t("home.keyStep1Prefix") %>
+        <% if (contact.email) { %>
+          <%= t("home.byEmail") %> <a href="mailto:<%= contact.email %>"><%= contact.email %></a><% if (contact.telegram || contact.phone) { %>,<% } %>
+        <% } %>
+        <% if (contact.telegram) { %>
+          <%= t("home.inTelegram") %> <a href="<%= contact.telegramUrl %>"><%= contact.telegramDisplay %></a><% if (contact.phone) { %>,<% } %>
+        <% } %>
+        <% if (contact.phone) { %>
+          <%= t("home.byPhone") %> <a href="tel:<%= contact.phoneTel %>"><%= contact.phone %></a>
+        <% } %>.
+      <% } else { %>
+        <%= t("home.keyStep1NoChannels") %>
+      <% } %>
+    </li>
+    <li><%= t("home.keyStep2") %></li>
+    <li><%= t("home.keyStep3Before") %> <strong><%= t("home.keyStep3Once") %></strong><%= t("home.keyStep3After") %></li>
+    <li><%= t("home.keyStep4") %></li>
+  </ol>
+</section>
+
+<section class="landing-section" id="security" aria-labelledby="security-heading">
+  <h2 id="security-heading"><%= t("home.securityHeading") %></h2>
+  <div class="landing-card landing-security">
+    <ul class="landing-security-list">
+      <li><%= t("home.security1") %></li>
+      <li><%= t("home.security2") %></li>
+      <li><%= t("home.security3") %></li>
+      <li><%= t("home.security4") %></li>
+    </ul>
+  </div>
+</section>
+
+<section class="landing-section landing-contact" id="contact" aria-labelledby="contact-heading">
+  <h2 id="contact-heading"><%= t("home.contactHeading") %></h2>
+  <% if (contact.hasChannels) { %>
+    <p class="landing-section-lead"><%= t("home.contactLeadWithChannels") %></p>
+  <% } else { %>
+    <p class="landing-section-lead"><%= t("home.contactLeadNoChannels") %></p>
+  <% } %>
+  <ul class="landing-contact-list">
+    <% if (contact.email) { %>
+      <li>
+        <span class="landing-contact-label"><%= t("contact.emailLabel") %></span>
+        <a href="mailto:<%= contact.email %>"><%= contact.email %></a>
+      </li>
+    <% } %>
+    <% if (contact.telegram) { %>
+      <li>
+        <span class="landing-contact-label"><%= t("contact.telegramLabel") %></span>
+        <a href="<%= contact.telegramUrl %>"><%= contact.telegramDisplay %></a>
+      </li>
+    <% } %>
+    <% if (contact.phone) { %>
+      <li>
+        <span class="landing-contact-label"><%= t("contact.phoneLabel") %></span>
+        <a href="tel:<%= contact.phoneTel %>"><%= contact.phone %></a>
+      </li>
+    <% } %>
+    <% if (contact.hoursUseLocale) { %>
+      <li>
+        <span class="landing-contact-label"><%= t("contact.hoursLabel") %></span>
+        <span><%= t("contact.hoursDefault") %></span>
+      </li>
+    <% } else if (contact.hours) { %>
+      <li>
+        <span class="landing-contact-label"><%= t("contact.hoursLabel") %></span>
+        <span><%= contact.hours %></span>
+      </li>
+    <% } %>
+  </ul>
+</section>
+
+<section class="landing-cta" aria-labelledby="cta-heading">
+  <h2 id="cta-heading"><%= t("home.ctaHeading") %></h2>
+  <p><%= t("home.ctaBody") %></p>
+  <a class="landing-btn landing-btn-primary" href="/docs"><%= t("home.ctaButton") %></a>
+</section>

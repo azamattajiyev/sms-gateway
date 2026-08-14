@@ -10,6 +10,7 @@ const accounts = require("./accounts");
 const queue = require("./queue");
 const { generateOtp, formatOtpMessage } = require("./otp");
 const { requireAdmin } = require("./admin/middleware");
+const publicRoutes = require("./public-site/routes");
 const authRoutes = require("./admin/auth-routes");
 const adminRoutes = require("./admin/routes");
 const accountsRoutes = require("./admin/accounts-routes");
@@ -34,6 +35,15 @@ function isValidPhone(phone) {
 function createApp() {
   getDb();
   const app = express();
+
+  app.use((req, res, next) => {
+    res.set({
+      "X-Content-Type-Options": "nosniff",
+      "Referrer-Policy": "strict-origin-when-cross-origin",
+      "X-Frame-Options": "SAMEORIGIN"
+    });
+    next();
+  });
 
   app.use(cors(corsOptions()));
   app.use(express.json());
@@ -66,6 +76,7 @@ function createApp() {
     next();
   });
 
+  app.use(publicRoutes);
   app.use(authRoutes);
   app.use("/admin/accounts", requireAdmin, accountsRoutes);
   app.use("/admin/devices", requireAdmin, devicesRoutes);

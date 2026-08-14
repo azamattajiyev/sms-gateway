@@ -69,6 +69,64 @@ const SESSION_SECRET = isProduction
   ? process.env.SESSION_SECRET
   : (process.env.SESSION_SECRET || "dev-session-secret");
 
+/** Unset env → fallback. Empty string after trim hides that one field. */
+function envTrimOrDefault(name, fallback) {
+  const raw = process.env[name];
+  if (raw === undefined) return fallback;
+  return String(raw).trim();
+}
+
+/** Telegram usernames: 5–32 chars, letters/digits/underscore. Invalid → unset. */
+function normalizeTelegramHandle(raw) {
+  const handle = String(raw || "").trim().replace(/^@+/, "");
+  if (!/^[A-Za-z0-9_]{5,32}$/.test(handle)) return "";
+  return handle;
+}
+
+function phoneTelHref(phone) {
+  return String(phone || "").replace(/[^\d+]/g, "");
+}
+
+const PUBLIC_CONTACT_EMAIL = envTrimOrDefault(
+  "PUBLIC_CONTACT_EMAIL",
+  "hello@abat-otp.example"
+);
+const PUBLIC_CONTACT_TELEGRAM = normalizeTelegramHandle(
+  envTrimOrDefault("PUBLIC_CONTACT_TELEGRAM", "abat_otp_example")
+);
+const PUBLIC_CONTACT_PHONE = envTrimOrDefault(
+  "PUBLIC_CONTACT_PHONE",
+  "+7 700 000-00-00"
+);
+
+/** Unset → translated default. Empty after trim hides hours. Non-empty shown in every language. */
+function resolvePublicContactHours() {
+  const raw = process.env.PUBLIC_CONTACT_HOURS;
+  if (raw === undefined) {
+    return { hours: "", hoursUseLocale: true };
+  }
+  return { hours: String(raw).trim(), hoursUseLocale: false };
+}
+
+const { hours: PUBLIC_CONTACT_HOURS, hoursUseLocale: PUBLIC_CONTACT_HOURS_USE_LOCALE } =
+  resolvePublicContactHours();
+
+const publicContact = {
+  email: PUBLIC_CONTACT_EMAIL,
+  telegram: PUBLIC_CONTACT_TELEGRAM,
+  telegramDisplay: PUBLIC_CONTACT_TELEGRAM ? `@${PUBLIC_CONTACT_TELEGRAM}` : "",
+  telegramUrl: PUBLIC_CONTACT_TELEGRAM
+    ? `https://t.me/${encodeURIComponent(PUBLIC_CONTACT_TELEGRAM)}`
+    : "",
+  phone: PUBLIC_CONTACT_PHONE,
+  phoneTel: phoneTelHref(PUBLIC_CONTACT_PHONE),
+  hours: PUBLIC_CONTACT_HOURS,
+  hoursUseLocale: PUBLIC_CONTACT_HOURS_USE_LOCALE,
+  hasChannels: Boolean(
+    PUBLIC_CONTACT_EMAIL || PUBLIC_CONTACT_TELEGRAM || PUBLIC_CONTACT_PHONE
+  )
+};
+
 function isInsecureAdminConfig() {
   if (!isProduction) return false;
   if (!SESSION_SECRET) return true;
@@ -101,6 +159,13 @@ module.exports = {
   SESSION_SECRET,
   ADMIN_USERNAME,
   ADMIN_PASSWORD,
+  PUBLIC_CONTACT_EMAIL,
+  PUBLIC_CONTACT_TELEGRAM,
+  PUBLIC_CONTACT_PHONE,
+  PUBLIC_CONTACT_HOURS,
+  publicContact,
+  normalizeTelegramHandle,
+  phoneTelHref,
   isInsecureAdminConfig,
   assertAdminConfig,
   getLanIPv4

@@ -1,0 +1,153 @@
+<section class="docs-page">
+  <p class="docs-back"><a href="/"><%= t("docs.back") %></a></p>
+  <h1><%= t("docs.h1") %></h1>
+  <p>
+    <%= t("docs.intro") %>
+  </p>
+
+  <h2 id="api-key"><%= t("docs.keyHeading") %></h2>
+  <p>
+    <%= t("docs.keyIntroBefore") %>
+    <% if (contact.hasChannels) { %>
+      <% if (contact.email) { %>
+        <%= t("docs.viaEmail") %> <a href="mailto:<%= contact.email %>"><%= contact.email %></a><% if (contact.telegram || contact.phone) { %>
+        <%= t("docs.or") %><% } %>
+      <% } %>
+      <% if (contact.telegram) { %>
+        <%= t("docs.viaTelegram") %> <a href="<%= contact.telegramUrl %>"><%= contact.telegramDisplay %></a><% if (contact.phone) { %>
+        <%= t("docs.or") %><% } %>
+      <% } %>
+      <% if (contact.phone) { %>
+        <%= t("docs.viaPhone") %> <a href="tel:<%= contact.phoneTel %>"><%= contact.phone %></a>
+      <% } %>
+    <% } else { %>
+      <%= t("docs.withOperator") %>
+    <% } %>.
+  </p>
+  <p>
+    <%= t("docs.keyOnce") %>
+  </p>
+
+  <h2 id="connect"><%= t("docs.connectHeading") %></h2>
+  <p>
+    <%= t("docs.connectHttps") %>
+  </p>
+  <p>
+    <%= t("docs.connectBase") %>
+  </p>
+  <p>
+    <%= t("docs.connectHeaders") %>
+  </p>
+
+  <h2 id="send-otp"><code>POST /api/send-otp</code></h2>
+  <p>
+    <%= t("docs.sendIntro") %>
+  </p>
+
+  <h3><%= t("docs.headersHeading") %></h3>
+  <table>
+    <thead>
+      <tr>
+        <th><%= t("docs.thHeader") %></th>
+        <th><%= t("docs.thValue") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>x-api-key</code></td>
+        <td><%= t("docs.headerKeyValue") %></td>
+      </tr>
+      <tr>
+        <td><code>Content-Type</code></td>
+        <td><code>application/json</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3><%= t("docs.bodyHeading") %></h3>
+  <pre><code>{
+  "phone": "+77001234567"
+}</code></pre>
+  <p>
+    <%= t("docs.phoneRule") %>
+  </p>
+
+  <h3><%= t("docs.successHeading") %></h3>
+  <p><%= t("docs.successHttp") %></p>
+  <pre><code>{
+  "status": "queued",
+  "code": "4821"
+}</code></pre>
+  <p>
+    <%= t("docs.queuedExplain") %>
+  </p>
+
+  <h3 id="errors"><%= t("docs.errorsHeading") %></h3>
+  <table>
+    <thead>
+      <tr>
+        <th><%= t("docs.thHttp") %></th>
+        <th><%= t("docs.thBody") %></th>
+        <th><%= t("docs.thWhen") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>400</td>
+        <td><code>{ "error": "phone required" }</code></td>
+        <td><%= t("docs.errPhoneRequired") %></td>
+      </tr>
+      <tr>
+        <td>400</td>
+        <td><code>{ "error": "invalid phone" }</code></td>
+        <td><%= t("docs.errInvalidPhone") %></td>
+      </tr>
+      <tr>
+        <td>401</td>
+        <td><code>{ "error": "Unauthorized" }</code></td>
+        <td><%= t("docs.errUnauthorized") %></td>
+      </tr>
+      <tr>
+        <td>429</td>
+        <td><code>{ "error": "quota exceeded" }</code></td>
+        <td><%= t("docs.errQuota") %></td>
+      </tr>
+      <tr>
+        <td>503</td>
+        <td><code>{ "error": "queue full" }</code></td>
+        <td><%= t("docs.errQueueFull") %></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 id="curl"><%= t("docs.curlHeading") %></h2>
+  <pre><code>curl -sS -X POST https://YOUR_DOMAIN/api/send-otp \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: otp_YOUR_API_KEY" \
+  -d '{"phone":"+77001234567"}'</code></pre>
+
+  <h2 id="example"><%= t("docs.exampleHeading") %></h2>
+  <p><%= t("docs.exampleLead") %></p>
+  <pre><code>const res = await fetch("https://YOUR_DOMAIN/api/send-otp", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "x-api-key": "otp_YOUR_API_KEY"
+  },
+  body: JSON.stringify({ phone: "+77001234567" })
+});
+const data = await res.json();
+// data.code is secret: store it hashed with a TTL on your side for verification.
+// Do not log it in production.</code></pre>
+
+  <h2 id="security"><%= t("docs.securityHeading") %></h2>
+  <ul>
+    <li><%= t("docs.sec1") %></li>
+    <li><%= t("docs.sec2") %></li>
+    <li><%= t("docs.sec3") %></li>
+    <li><%= t("docs.sec4") %></li>
+    <li><%= t("docs.sec5") %></li>
+    <li><%= t("docs.sec6") %></li>
+    <li><%= t("docs.sec7") %></li>
+  </ul>
+</section>

@@ -1,0 +1,462 @@
+:root {
+  --landing-primary: #6571ff;
+  --landing-dark: #1c1f33;
+  --landing-bg: #f5f6fa;
+  --landing-muted: #6c757d;
+  --landing-border: #e6e8ef;
+}
+
+.landing-body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--landing-bg);
+  color: var(--landing-dark);
+}
+
+.landing-skip:focus {
+  position: absolute;
+  z-index: 1000;
+  top: 0.5rem;
+  left: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: #fff;
+  color: var(--landing-dark);
+}
+
+.landing-header {
+  background: var(--landing-dark);
+  color: #fff;
+}
+
+.landing-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0.85rem 1.5rem;
+}
+
+.landing-brand {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+}
+
+.landing-brand span {
+  color: var(--landing-primary);
+}
+
+.landing-nav-links {
+  display: flex;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.landing-nav-link {
+  display: block;
+  padding: 0.4rem 0.75rem;
+  color: #c5c9d6;
+  text-decoration: none;
+  border-radius: 0.375rem;
+}
+
+.landing-nav-link:hover,
+.landing-nav-link.active {
+  color: #fff;
+}
+
+.landing-nav-end {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.landing-lang {
+  display: flex;
+  gap: 0.15rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.landing-lang-link {
+  display: block;
+  padding: 0.35rem 0.5rem;
+  color: #c5c9d6;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: 0.375rem;
+}
+
+.landing-lang-link:hover,
+.landing-lang-link.active,
+.landing-lang-link[aria-current="true"] {
+  color: #fff;
+}
+
+@media (max-width: 575.98px) {
+  .landing-nav-end {
+    flex-basis: 100%;
+    justify-content: space-between;
+  }
+}
+
+.landing-main {
+  flex: 1;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 3.5rem;
+}
+
+.landing-hero {
+  padding: 2.75rem 0 2.25rem;
+}
+
+.landing-hero .landing-kicker {
+  margin: 0 0 0.75rem;
+  max-width: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--landing-primary);
+}
+
+.landing-hero h1,
+.docs-page h1 {
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.landing-hero h1 {
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  line-height: 1.15;
+}
+
+.landing-hero .landing-hero-lead {
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--landing-dark);
+}
+
+.landing-hero p,
+.docs-page p {
+  max-width: 40rem;
+  color: var(--landing-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.landing-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.landing-btn {
+  display: inline-block;
+  padding: 0.7rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  line-height: 1.25;
+}
+
+.landing-btn-primary {
+  background: var(--landing-primary);
+  color: #fff;
+}
+
+.landing-btn-primary:hover,
+.landing-btn-primary:focus-visible {
+  background: #5460f0;
+  color: #fff;
+}
+
+.landing-btn-secondary {
+  background: #fff;
+  color: var(--landing-dark);
+  border: 1px solid var(--landing-border);
+}
+
+.landing-btn-secondary:hover,
+.landing-btn-secondary:focus-visible {
+  border-color: var(--landing-primary);
+  color: var(--landing-primary);
+}
+
+.docs-page {
+  padding: 1.5rem 0 1rem;
+}
+
+.landing-section {
+  padding: 2.25rem 0;
+}
+
+.landing-section h2,
+.landing-cta h2 {
+  margin-bottom: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.landing-section-lead {
+  margin-bottom: 1.25rem;
+  max-width: 40rem;
+  color: var(--landing-muted);
+  line-height: 1.6;
+}
+
+.landing-section-lead a,
+.landing-key-list a {
+  color: var(--landing-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.landing-section-lead a:hover,
+.landing-key-list a:hover {
+  text-decoration: underline;
+}
+
+.landing-steps {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: landing-step;
+}
+
+.landing-steps > li {
+  counter-increment: landing-step;
+}
+
+.landing-card {
+  background: #fff;
+  border: 1px solid var(--landing-border);
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.35rem;
+}
+
+.landing-steps .landing-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.landing-steps .landing-card h3::before {
+  content: counter(landing-step) ". ";
+  color: var(--landing-primary);
+}
+
+.landing-steps .landing-card p {
+  margin: 0;
+  color: var(--landing-muted);
+  line-height: 1.55;
+}
+
+.landing-hero code,
+.landing-card code,
+.landing-section-lead code,
+.landing-cta code {
+  padding: 0.1em 0.35em;
+  font-size: 0.9em;
+  color: var(--landing-dark);
+  word-break: break-word;
+  background: #eceef5;
+  border-radius: 0.25rem;
+}
+
+.landing-section[id] {
+  scroll-margin-top: 0.75rem;
+}
+
+.landing-key-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  max-width: 40rem;
+}
+
+.landing-key-list li {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.landing-security-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.landing-security-list li {
+  margin-bottom: 0.65rem;
+  line-height: 1.55;
+}
+
+.landing-security-list li:last-child {
+  margin-bottom: 0;
+}
+
+.landing-contact-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 40rem;
+  background: #fff;
+  border: 1px solid var(--landing-border);
+  border-radius: 0.75rem;
+}
+
+.landing-contact-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--landing-border);
+  line-height: 1.5;
+}
+
+.landing-contact-list li:last-child {
+  border-bottom: none;
+}
+
+.landing-contact-label {
+  flex: 0 0 8rem;
+  font-weight: 600;
+  color: var(--landing-dark);
+}
+
+.landing-contact-list a,
+.landing-footer-nav a[href^="mailto:"],
+.landing-footer-nav a[href^="https://t.me/"] {
+  color: var(--landing-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.landing-contact-list a:hover,
+.landing-footer-nav a[href^="mailto:"]:hover,
+.landing-footer-nav a[href^="https://t.me/"]:hover {
+  text-decoration: underline;
+}
+
+.landing-cta {
+  margin-top: 1rem;
+  padding: 2rem 1.5rem;
+  background: #fff;
+  border: 1px solid var(--landing-border);
+  border-radius: 0.75rem;
+}
+
+.landing-cta p {
+  margin-bottom: 1.25rem;
+  max-width: 36rem;
+  color: var(--landing-muted);
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+  .landing-steps {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .landing-cta {
+    padding: 2.25rem 2rem;
+  }
+}
+
+.landing-footer {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--landing-border);
+  background: #fff;
+  text-align: center;
+}
+
+.landing-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.landing-footer-nav a {
+  color: var(--landing-dark);
+  text-decoration: none;
+}
+
+.landing-footer-nav a:hover {
+  color: var(--landing-primary);
+}
+
+.landing-footer-copy {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--landing-muted);
+}
+
+/* Docs: code blocks and tables */
+.docs-page pre {
+  margin: 1rem 0 1.5rem;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  background: var(--landing-dark);
+  color: #e8eaf2;
+  border-radius: 0.5rem;
+}
+
+.docs-page pre code {
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: inherit;
+  background: none;
+}
+
+.docs-page :not(pre) > code {
+  padding: 0.1em 0.35em;
+  font-size: 0.9em;
+  background: #eceef5;
+  border-radius: 0.25rem;
+}
+
+.docs-page table {
+  width: 100%;
+  margin: 1rem 0 1.75rem;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.docs-page th,
+.docs-page td {
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--landing-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.docs-page th {
+  background: #fff;
+  font-weight: 600;
+}
+
+.docs-page tbody tr:nth-child(even) {
+  background: #fff;
+}

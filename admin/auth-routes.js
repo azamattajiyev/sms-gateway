@@ -12,13 +12,6 @@ function renderLogin(res, error) {
   });
 }
 
-router.get("/", (req, res) => {
-  if (req.session && req.session.user) {
-    return res.redirect("/admin");
-  }
-  return res.redirect("/login");
-});
-
 router.get("/login", (req, res) => {
   if (req.session && req.session.user) {
     return res.redirect("/admin");

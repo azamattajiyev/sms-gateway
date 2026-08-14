@@ -13,6 +13,7 @@ A Node.js HTTP + WebSocket SMS gateway. Android relay devices connect over WebSo
 - SMS rate limiting per device
 - In-memory message queue
 - SQLite persistence for API accounts and remaining SMS quota
+- Public landing at `/` and integration docs at `/docs` (no login)
 - Admin panel at `/login` and `/admin`
 - Secure communication via WSS (Nginx + SSL)
 
@@ -98,9 +99,15 @@ pm2 startup
 
 ---
 
+## Public site
+
+`GET /` is the public marketing page; `GET /docs` is the client integration guide for `POST /api/send-otp`. Neither requires a session. Both support English (`en`), Russian (`ru`, default), and Turkmen (`tk`, Latin script). The header has an EN / RU / TK switcher; the choice is stored in cookie `public.lang` and can be overridden with `?lang=en|ru|tk`. `/login` and `/admin` stay English operator UI and are not translated.
+
+Public contact (email, Telegram, phone, hours) on the landing, docs, and footer comes from `PUBLIC_CONTACT_EMAIL`, `PUBLIC_CONTACT_TELEGRAM`, `PUBLIC_CONTACT_PHONE`, and `PUBLIC_CONTACT_HOURS`. Defaults are placeholders — replace them with real contact info. If `PUBLIC_CONTACT_HOURS` is unset, each language shows its translated default hours; an empty value hides hours; a set value is shown unchanged in every language. Do not treat `/` as a login redirect.
+
 ## Admin panel
 
-Open `http://HOST:PORT/login` (local default `http://localhost:3000/login`). Credentials are `ADMIN_USERNAME` / `ADMIN_PASSWORD` (local defaults `admin` / `admin`). After login you land on `/admin`.
+Open `http://HOST:PORT/login` (local default `http://localhost:3000/login`). Credentials are `ADMIN_USERNAME` / `ADMIN_PASSWORD` (local defaults `admin` / `admin`). After login you land on `/admin`. `/` stays the public landing even when an admin cookie is present.
 
 **Create an account and send an OTP**
 
@@ -169,7 +176,7 @@ Queued SMS text is `Your {brandName} code: {code}` (example brand `Abat`, code `
 
 WebSocket requires proper headers (`Upgrade` and `Connection`) to work correctly.
 
-If you terminate SSL on Nginx, proxy **HTTP as well as `/ws`**. The admin panel (`/login`, `/admin`) and send-otp (`/api`) must reach the same Node `PORT`. Proxying only `/ws` leaves `/admin` and `/api` unreachable on the domain.
+If you terminate SSL on Nginx, proxy **HTTP as well as `/ws`**. The public landing (`/`, `/docs`), admin panel (`/login`, `/admin`), and send-otp (`/api`) must reach the same Node `PORT`. Proxying only `/ws` leaves the site, `/admin`, and `/api` unreachable on the domain. The landing is public on the domain.
 
 ---
 
@@ -214,7 +221,7 @@ server {
         proxy_read_timeout 86400;
     }
 
-    # Admin (/login, /admin), send-otp (/api), and static assets.
+    # Public landing (/), docs (/docs), admin (/login, /admin), send-otp (/api), static assets.
     location / {
         proxy_pass http://127.0.0.1:6050;
         proxy_set_header Host $host;
@@ -291,6 +298,10 @@ They are **not** interchangeable. Env `API_KEY` returns 401 on send-otp. An acco
 | `ADMIN_USERNAME` | `admin` | Admin login at `/login`. |
 | `ADMIN_PASSWORD` | `admin` (local only) | Admin login. **Not for production.** |
 | `NODE_ENV` | unset → `development` | `production` sets `session.cookie.secure` and rejects default admin secrets at startup. |
+| `PUBLIC_CONTACT_EMAIL` | `hello@abat-otp.example` | Email on the public landing, docs, and footer. Placeholder until replaced. Empty string hides this field. |
+| `PUBLIC_CONTACT_TELEGRAM` | `abat_otp_example` | Telegram handle on public pages (5–32 chars `[A-Za-z0-9_]`, with or without `@`). Placeholder until replaced. Empty or invalid handle hides this field. |
+| `PUBLIC_CONTACT_PHONE` | `+7 700 000-00-00` | Phone on the public landing, docs, and footer. Placeholder until replaced. Empty string hides this field. |
+| `PUBLIC_CONTACT_HOURS` | unset (translated default) | Hours on the landing contact section. Unset → translated default per language (en/ru/tk). Empty string hides the field. A set value is shown as-is in every language. |
 
 ### Persistence
 
@@ -351,8 +362,9 @@ npm test
 Manual:
 
 1. Start the server (`node index.js`)
-2. Log in at `/login`, create an account, copy the key
-3. Connect a WebSocket client / `sms_relay` with env `API_KEY`
+2. Open `/` (public landing) and `/docs` (integration guide)
+3. Log in at `/login`, create an account, copy the key
+4. Connect a WebSocket client / `sms_relay` with env `API_KEY`
 4. Check logs:
 
 ```bash
@@ -426,8 +438,8 @@ To get everything working:
 
 1. Copy `.env.example` to `.env` and set secrets
 2. Run the Node.js server
-3. Log in at `/login`, create an account, copy the API key
-4. Configure Nginx to proxy `/ws` **and** `/` (admin + `/api`) to the same `PORT`
+3. Confirm `/` is the public landing and `/docs` is the client guide; log in at `/login`, create an account, copy the API key
+4. Configure Nginx to proxy `/ws` **and** `/` (landing, `/docs`, admin, `/api`) to the same `PORT`
 5. Enable SSL
 6. Connect devices via `wss://YOUR_DOMAIN/ws` with env `API_KEY`
 7. Call `POST /api/send-otp` with the **account** `x-api-key` and `{ "phone" }`
